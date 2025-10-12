@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	"github.com/adedejiosvaldo/gopher_social/internal/db"
 	"github.com/adedejiosvaldo/gopher_social/internal/env"
 	"github.com/adedejiosvaldo/gopher_social/internal/store"
 )
@@ -17,7 +18,12 @@ func main() {
 			maxIdleConns: env.GetInt("DB_MAX_IDLE_CONNS", 30),
 			maxIdleTime:  env.GetString("DB_MAX_IDLE_TIME", "15min")}}
 
-	store := store.NewPostgresStorage(nil)
+	db, err := db.New(cfg.dbConfig.address, cfg.dbConfig.maxOpenConns, cfg.dbConfig.maxIdleConns, cfg.dbConfig.maxIdleTime)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	store := store.NewPostgresStorage(db)
 
 	app := &application{config: cfg, store: store}
 
