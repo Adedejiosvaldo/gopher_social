@@ -15,8 +15,16 @@ type application struct {
 	store  store.Storage
 }
 
+type dbConfig struct {
+	address      string
+	maxOpenConns int
+	maxIdleConns int
+	maxIdleTime  string
+}
+
 type config struct {
-	address string
+	address  string
+	dbConfig dbConfig
 }
 
 // function to return mux
