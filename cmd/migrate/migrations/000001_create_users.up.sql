@@ -3,5 +3,5 @@ CREATE TABLE IF NOT EXISTS users (
     email citext NOT NULL UNIQUE,
     username VARCHAR(255) NOT NULL UNIQUE,
     password bytea NOT NULL,
-    created_at TIMESTAMP(0) with time zone NOT NULL DEFAULT NOW(),
+    created_at TIMESTAMP(0) with time zone NOT NULL DEFAULT NOW()
 );

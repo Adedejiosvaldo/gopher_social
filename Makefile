@@ -26,3 +26,13 @@ migrate-force:
 	@echo "Forcing migration version..."
 	@migrate -path=$(MIGRATION_DIR) -database=$(DATABASE_URL) force $(filter-out $@,$(MAKECMDGOALS))
 	@echo "Migration forced."
+
+.PHONY: migrate-version
+migrate-version:
+	@migrate -path=$(MIGRATION_DIR) -database=$(DATABASE_URL) version
+
+.PHONY: migrate-drop
+migrate-drop:
+	@echo "Dropping database..."
+	@migrate -path=$(MIGRATION_DIR) -database=$(DATABASE_URL) drop -f
+	@echo "Database dropped."
