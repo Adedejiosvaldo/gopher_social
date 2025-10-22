@@ -25,6 +25,7 @@ type dbConfig struct {
 type config struct {
 	address  string
 	dbConfig dbConfig
+	env      string
 }
 
 // function to return mux

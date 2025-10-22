@@ -8,6 +8,8 @@ import (
 	"github.com/adedejiosvaldo/gopher_social/internal/store"
 )
 
+var version = "0.0.1"
+
 func main() {
 
 	cfg := config{
@@ -16,7 +18,10 @@ func main() {
 			address:      env.GetString("DB_ADDR", "postgres://admin:adminpassword@localhost/social?sslmode=disable"),
 			maxOpenConns: env.GetInt("DB_MAX_OPEN_CONNS", 30),
 			maxIdleConns: env.GetInt("DB_MAX_IDLE_CONNS", 30),
-			maxIdleTime:  env.GetString("DB_MAX_IDLE_TIME", "15m")}}
+			maxIdleTime:  env.GetString("DB_MAX_IDLE_TIME", "15m"),
+		},
+		env: env.GetString("ENV", "development"),
+	}
 
 	db, err := db.New(cfg.dbConfig.address, cfg.dbConfig.maxOpenConns, cfg.dbConfig.maxIdleConns, cfg.dbConfig.maxIdleTime)
 	if err != nil {
