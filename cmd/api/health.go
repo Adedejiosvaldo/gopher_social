@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 )
 
@@ -15,6 +14,6 @@ func (app *application) healthCheck(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if err := writeJSON(w, http.StatusOK, data); err != nil {
 
-		log.Print(err.Error())
+		writeJSONError(w, http.StatusInternalServerError, err.Error())
 	}
 }
