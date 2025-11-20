@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -58,16 +59,32 @@ func (app *application) getPostHandler(w http.ResponseWriter, r *http.Request) {
 	post, err := app.store.Posts.GetPostById(ctx, id)
 
 	if err != nil {
-		writeJSONError(w, http.StatusBadRequest, err.Error())
+		switch {
+		case errors.Is(err, store.ErrNotFound):
+			writeJSONError(w, http.StatusNotFound, err.Error())
+		default:
+			writeJSONError(w, http.StatusBadRequest, err.Error())
+		}
 		return
 	}
 
-	if post == nil {
-		writeJSONError(w, http.StatusBadRequest, "No posts found")
-		return
-	}
-
-	if err := writeJSON(w, http.StatusCreated, post); err != nil {
+	if err := writeJSON(w, http.StatusOK, post); err != nil {
 		writeJSONError(w, http.StatusInternalServerError, err.Error())
+		return
 	}
 }
+
+// THis works but is poorly written
+// 	writeJSONError(w, http.StatusBadRequest, err.Error())
+// 	return
+// }
+
+// if post == nil {
+// 	writeJSONError(w, http.StatusBadRequest, "No posts found")
+// 	return
+// }
+
+// if err := writeJSON(w, http.StatusCreated, post); err != nil {
+// 	writeJSONError(w, http.StatusInternalServerError, err.Error())
+// }
+// }
